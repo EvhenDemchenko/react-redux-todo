@@ -24,9 +24,10 @@ function App() {
                     dispatch(setItem(res));
                 }
             })
-    }, [dispatch, items]);
+    }, [dispatch]);
 
     const onAddToRedux = async () => {
+        console.log(items)
         const newItems = [...items, {value: val, id: v4()}];
         await localForage.setItem('todo', newItems)
             .then(()=>{

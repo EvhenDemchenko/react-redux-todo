@@ -14,6 +14,6 @@ const todo = createSlice({
         }
     }
 })
-
+console.log(todo)
 export const {setItem} = todo.actions;
 export default todo.reducer;
