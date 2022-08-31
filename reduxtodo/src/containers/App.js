@@ -1,19 +1,16 @@
 //Core
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setItem} from "../engine/core/todo/slice";
-import {v4} from "uuid"
 //parts
 import localForage from 'localforage';
 import Item from "../components/Item";
 import Footer from "../components/Footer";
+import Form from "../components/Form";
 
 function App() {
     const dispatch = useDispatch();
-    const items = useSelector((state) => {
-        return state.todo.items;
-    })
-    const [val, setVal] = useState('');
+    const items = useSelector((state) => state.todo.items);
 
     useEffect(() => {
         localForage.getItem('todo')
@@ -26,22 +23,9 @@ function App() {
             })
     }, [dispatch]);
 
-    const onAddToRedux = async () => {
-        console.log(items)
-        const newItems = [...items, {value: val, id: v4()}];
-        await localForage.setItem('todo', newItems)
-            .then(()=>{
-                setVal('')
-            })
-        dispatch(setItem(newItems));
-    }
-
     return (
         <div className="App">
-            <form onSubmit={e => e.preventDefault()}>
-                <input value={val} onChange={e => setVal(e.target.value)} type="text"/>
-                <button onClick={onAddToRedux}> add todo</button>
-            </form>
+            <Form/>
             {items.map(item => <Item key={item.id} value={item.value}/>)}
             <Footer/>
         </div>
