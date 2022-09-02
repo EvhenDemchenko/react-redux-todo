@@ -11,7 +11,7 @@ const todo = createSlice({
     reducers: {
         setItem: (state, action) => {
             state.items = action.payload;
-        }
+        },
     }
 })
 
