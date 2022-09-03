@@ -1,13 +1,9 @@
 //Core
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch } from "react-redux";
 import {useState} from "react";
 //Engine
-import {setItem} from "../engine/core/todo/slice";
 import {onAddItem} from "../engine/core/thunk/thunks"
 //Parts
-import {v4} from "uuid";
-import localForage from "localforage";
-
 
 export default function Form() {
     const [val, setVal] = useState('');
