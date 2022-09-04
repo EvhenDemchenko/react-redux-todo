@@ -1,8 +1,8 @@
 import localForage from "localforage";
-import {setItem} from "../todo/slice";
+import {setItem, setCompleted} from "../todo/slice";
 import {v4} from "uuid";
 
-export const onDeleteItem = (id, items) => (action) => {
+export const onDeleteItem = (id, items) => (dispatch) => {
     const res = items.filter(item => {
         if (item.id !== id) {
             return item
@@ -10,18 +10,18 @@ export const onDeleteItem = (id, items) => (action) => {
     })
     localForage.setItem('todo', res)
         .then(res => {
-            return action(setItem(res));
+            return dispatch(setItem(res));
         })
 };
 
-export const onRemoveAllItems = () => action => {
+export const onRemoveAllItems = () => dispatch => {
     localForage.setItem('todo', [])
         .then(() => {
-            action(setItem([]));
+            dispatch(setItem([]));
         })
 };
 
-export const editItem = (id, value) => (action, getState) => {
+export const editItem = (id, value) => (dispatch, getState) => {
     const items = getState().todo.items;
 
     const res = items.map(item => {
@@ -33,11 +33,11 @@ export const editItem = (id, value) => (action, getState) => {
     })
     localForage.setItem('todo', res)
         .then(res => {
-            return action(setItem(res));
+            return dispatch(setItem(res));
         })
 };
 
-export const onAddItem = (value) => (action, getState) => {
+export const onAddItem = (value,setValue) => (dispatch, getState) => {
     const items = getState().todo.items;
 
     const newItems = [...items,
@@ -45,11 +45,12 @@ export const onAddItem = (value) => (action, getState) => {
     ];
     localForage.setItem('todo', newItems)
         .then(() => {
-            action(setItem(newItems));
+            dispatch(setItem(newItems));
+            setValue('');
         })
 };
 
-export const onCompleteItem = (id) => (action, getState) => {
+export const onCompleteItem = (id) => (dispatch, getState) => {
     const items = getState().todo.items;
 
     const res = items.map(item => {
@@ -61,19 +62,24 @@ export const onCompleteItem = (id) => (action, getState) => {
     })
     localForage.setItem('todo', res)
         .then(res => {
-            action(setItem(res))
+            dispatch(setItem(res));
         })
 };
 
-export const init = () => (action, getState) => {
+export const init = () => (dispatch, getState) => {
     const items = getState().todo.items;
-
     localForage.getItem('todo')
         .then(res => {
             if (res === null) {
-                localForage.setItem('todo', items)
+                localForage.setItem('todo', items);
             } else {
-                action(setItem(res));
+                dispatch(setItem(res));
             }
         })
+};
+
+export const showCompletedItems = () => (dispatch, getState) => {
+    const items = getState().todo.items;
+    const res = items.filter(item=> item.complete === true);
+    return dispatch(setCompleted(res))
 }

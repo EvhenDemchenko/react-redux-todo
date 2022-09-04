@@ -3,6 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     items: [],
+    completed: []
 }
 
 const todo = createSlice({
@@ -12,8 +13,11 @@ const todo = createSlice({
         setItem: (state, action) => {
             state.items = action.payload;
         },
+        setCompleted: (state, action) => {
+            state.completed = action.payload;
+        }
     }
 })
 
-export const {setItem} = todo.actions;
+export const {setItem, setCompleted} = todo.actions;
 export default todo.reducer;

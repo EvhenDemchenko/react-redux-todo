@@ -10,13 +10,14 @@ export default function Form() {
     const dispatch = useDispatch();
 
     const onAddToRedux = () => {
-        dispatch(onAddItem(val))
-        setVal('')
-    }
+        dispatch(onAddItem(val, setVal))
 
+    }
+    const setInputValue = e => setVal(e.target.value);
+    const preventSubmit = e => e.preventDefault();
     return (
-        <form onSubmit={e => e.preventDefault()}>
-            <input value={val} onChange={e => setVal(e.target.value)} type="text"/>
+        <form onSubmit={preventSubmit}>
+            <input value={val} onChange={setInputValue} type="text"/>
             <button onClick={onAddToRedux}> add todo</button>
         </form>
     )
