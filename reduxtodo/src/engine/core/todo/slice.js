@@ -3,7 +3,8 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     items: [],
-    completed: []
+    type: "all",
+    search: ''
 }
 
 const todo = createSlice({
@@ -14,10 +15,13 @@ const todo = createSlice({
             state.items = action.payload;
         },
         setCompleted: (state, action) => {
-            state.completed = action.payload;
+            state.type = action.payload;
+        },
+        setSearch: (state, action) => {
+            state.search = action.payload;
         }
     }
 })
 
-export const {setItem, setCompleted} = todo.actions;
+export const {setItem, setCompleted, setSearch} = todo.actions;
 export default todo.reducer;

@@ -1,58 +1,47 @@
 //Core
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {init, showCompletedItems} from "../engine/core/thunk/thunks";
+import {init} from "../engine/core/thunk/thunks";
 import Selectors from '../engine/init/selectors';
 //parts
 import Item from "../components/Item";
 import Footer from "../components/Footer";
 import Form from "../components/Form";
-import {setCompleted} from "../engine/core/todo/slice";
+import {setSearch} from "../engine/core/todo/slice"
+//UI
+
+import {Container} from "@mui/material";
+import {TextField} from "@mui/material"
+//Style
+import {useStyles} from "../styles/style"
 
 function App() {
     const dispatch = useDispatch();
-    const items = useSelector(Selectors.items);
-    const completed = useSelector(Selectors.completed);
-    const [value, setValue] = useState([]);
+    const items = useSelector(Selectors.searchItems);
+    const classes = useStyles();
 
     useEffect(() => {
         dispatch(init());
     }, [dispatch]);
 
-    useEffect(() => {
-        setValue(items)
-    }, [items]);
-
-    useEffect(() => {
-        setValue(completed)
-    }, [completed]);
-
-
-    const showCompleted = () => {
-        dispatch(showCompletedItems())
-    }
-    const showAllItems = () => {
-        dispatch(setCompleted(items));
+    const handleSearch = (e) => {
+        dispatch(setSearch(e.target.value))
     }
     return (
-        <div className="App">
-            <div>
-                <button onClick={showCompleted}>
-                    completed
-                </button>
-                <button onClick={showAllItems}>
-                    all
-                </button>
-            </div>
+        <Container className={classes.App} maxWidth="md">
             <Form/>
-            {value.map(({id, value, editable, complete}) => <Item
+            {items.map(({id, value, editable, complete}) => <Item
                 key={id}
                 value={value}
                 id={id}
                 editable={editable}
-                complete={complete}/>)}
-            <Footer/>
-        </div>
+                complete={complete}/>)
+            }
+            <Container className={classes.SearchContainer} maxWidth='md'>
+                <Footer/>
+                <TextField label="Search..." variant="filled" type="text" onChange={handleSearch}/>
+            </Container>
+        </Container>
     );
 }
 

@@ -4,10 +4,20 @@ import {useState} from "react";
 import {onDeleteItem, editItem, onCompleteItem} from "../engine/core/thunk/thunks";
 //Redux
 import {useDispatch, useSelector} from "react-redux";
+//Icons
+import {Delete} from "@mui/icons-material";
+import {Mode} from '@mui/icons-material';
+//Style
+import {Button} from "@mui/material";
+import {Checkbox} from "@mui/material";
+import {TextField} from "@mui/material";
+import {ListItem} from "@mui/material";
+import {useStyles} from "../styles/style";
 
 function Item({value, id, editable, complete}) {
     const dispatch = useDispatch();
     const items = useSelector(state => state.todo.items);
+    const classes = useStyles();
     const [val, setVal] = useState(value)
 
     const onDelete = () => {
@@ -21,18 +31,19 @@ function Item({value, id, editable, complete}) {
     }
 
     return (
-        <div className="item">
-            <label className="itemValue">
-                <input onClick={onComplete} type="checkbox" defaultChecked={complete}/>
+        <ListItem alignItems='flex-start' className={classes.item}>
+            <label className={classes.itemSpan}>
+                <Checkbox onClick={onComplete} type="checkbox" checked={complete}/>
                 {editable
-                    ? <input type="text" value={val} onChange={e => setVal(e.target.value)}/>
+                    ? <TextField className={classes.itemInput} type="text" value={val}
+                                 onChange={e => setVal(e.target.value)}/>
                     : <b>{val}</b>}
             </label>
-            <div>
-                <button onClick={onEdite}> edit item</button>
-                <button onClick={onDelete}> delete</button>
+            <div className={classes.itemBtns}>
+                <Button variant="contained" startIcon={<Mode/>} onClick={onEdite}> edit item</Button>
+                <Button variant="outlined" color='error' startIcon={<Delete/>} onClick={onDelete}> delete</Button>
             </div>
-        </div>
+        </ListItem>
     )
 }
 

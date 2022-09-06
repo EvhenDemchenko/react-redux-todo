@@ -1,5 +1,5 @@
 import localForage from "localforage";
-import {setItem, setCompleted} from "../todo/slice";
+import {setItem} from "../todo/slice";
 import {v4} from "uuid";
 
 export const onDeleteItem = (id, items) => (dispatch) => {
@@ -37,7 +37,7 @@ export const editItem = (id, value) => (dispatch, getState) => {
         })
 };
 
-export const onAddItem = (value,setValue) => (dispatch, getState) => {
+export const onAddItem = (value, setValue) => (dispatch, getState) => {
     const items = getState().todo.items;
 
     const newItems = [...items,
@@ -78,8 +78,3 @@ export const init = () => (dispatch, getState) => {
         })
 };
 
-export const showCompletedItems = () => (dispatch, getState) => {
-    const items = getState().todo.items;
-    const res = items.filter(item=> item.complete === true);
-    return dispatch(setCompleted(res))
-}
